@@ -11,4 +11,3 @@ with open("data/demo.csv") as container_csv:
     for row in csv_reader_object:
         #append the row to the list of all container data
         container_data.append(row)
-
