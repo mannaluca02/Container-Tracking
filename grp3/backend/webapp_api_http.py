@@ -1,11 +1,14 @@
 import requests
 import os
+import csv
 
 """This function pull the data from the webapplication (https://fl-17-240.zhdk.cloud.switch.ch/) and returns it in a 2D Array
 
 """
 
 def fetch_data_webapp_http():
+    container_data = []
+
     # Defines the URL from the Webapplication and where the data is placed
     download_url = "https://fl-17-240.zhdk.cloud.switch.ch/files/horw-luzern.csv?path=../data/migros/grp3/horw-luzern.csv"
 
@@ -18,12 +21,16 @@ def fetch_data_webapp_http():
 
     # Checks if the get request was successful
     if response.status_code == 200:
-        # saves the file in the before defined path
-        with open(save_path, 'wb') as f:
-            f.write(response.content)
-        print(f'File was saved in: {save_path}')
+        print("wroks")
+        lines = response.text.splitlines()
+        
+        csv_render_object = csv.reader(lines, delimiter=",")
+        for row in csv_render_object:
+            container_data.append(row)
+        print(container_data)
+        
     else:
         print(f'Error! The API get request was not successful. Error code: {response.status_code}')
-
+    
 
 fetch_data_webapp_http()
