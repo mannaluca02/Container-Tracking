@@ -12,7 +12,7 @@ def get_color(temp_vars):
         return "green"
 
 def show_routes(container_data):
-    # Extract coordinates and corresponding third variable
+    # Extract coordinates and corresponding temp variable
     coordinates = [(float(row[1]), float(row[2])) for row in container_data]
     temp_vars = [float(row[3]) for row in container_data]
 
@@ -34,7 +34,7 @@ def show_routes(container_data):
         start = coordinates[i]
         end = coordinates[i + 1]
 
-        # Get the color for this line segment based on the third variable
+        # Get the color for this line segment based on the temp variable
         color = get_color(temp_vars[i])
 
         # Draw the line segment with the determined color
