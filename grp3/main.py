@@ -2,11 +2,13 @@ import sys
 import argparse
 from pathlib import Path
 from backend import local
+from frontend import routes
 
 
 def backend_selection(backend, path):
     if backend == 1:
         list_of_data = local.get_local_data(path)
+        routes.show_routes(list_of_data)
         print(list_of_data)
     elif backend == 2:
         print(backend)

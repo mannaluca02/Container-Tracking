@@ -32,7 +32,6 @@ def show_routes(container_data):
     # Loop through each pair of consecutive coordinates and draw a line segment
     for i in range(len(coordinates) - 1):
         start = coordinates[i]
-        print(i)
         end = coordinates[i + 1]
 
         # Get the color for this line segment based on the third variable
