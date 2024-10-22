@@ -11,3 +11,6 @@ Deactivate virtual env
 ```bash
 deactivate
 ```
+
+
+“README.md” mit Installationsanleitung und Beschreibung der Applikation: In diesem README stehen die Erläuterungen, um die Applikation und ihre Abhängigkeiten mit den korrekten Versionen lokal zu installieren und zu betreiben.
