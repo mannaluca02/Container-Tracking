@@ -4,6 +4,7 @@ from pathlib import Path
 from infrastructure import local
 from frontend import routes
 from infrastructure import webapp
+from infrastructure import webservice_http
 
 
 def backend_selection(backend, path):
@@ -14,10 +15,13 @@ def backend_selection(backend, path):
     elif backend == 2: # from webapp
         list_of_data = webapp.fetch_webapp()
         routes.show_routes(list_of_data)
-        print(list_of_data)
-        print(backend)
+        # print(list_of_data)
+        # print(backend)
     elif backend == 3:
-        print(backend)
+        list_of_data = webservice_http.fetch_webservice_http("frodo","luzern-horw")
+        routes.show_routes(list_of_data)
+        # print(list_of_data)
+        # print(backend)
     elif backend == 4:
         print(backend)
     else:

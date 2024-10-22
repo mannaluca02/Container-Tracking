@@ -12,16 +12,12 @@ def fetch_webapp():
     # Defines the URL from the Webapplication and where the data is placed
     download_url = "https://fl-17-240.zhdk.cloud.switch.ch/files/horw-luzern.csv?path=../data/migros/grp3/horw-luzern.csv"
 
-    # Defines the path where the file should be placed
-    save_directory = './grp3/backend/data'
-    save_path = os.path.join(save_directory, 'horw-luzern.csv')
-
     # Performs a get request (get data) with the before defined webapp url and file path
     response = requests.get(download_url)
 
     # Checks if the get request was successful
     if response.status_code == 200:
-        print("wroks")
+        print("Executed successfully")
         lines = response.text.splitlines()
         
         csv_render_object = csv.reader(lines, delimiter=",")
