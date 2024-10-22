@@ -27,9 +27,8 @@ def fetch_webapp():
         csv_render_object = csv.reader(lines, delimiter=",")
         for row in csv_render_object:
             container_data.append(row)
-        print(container_data)
+        return container_data
         
     else:
         print(f'Error! The API get request was not successful. Error code: {response.status_code}')
     
-
