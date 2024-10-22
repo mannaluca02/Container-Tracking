@@ -1,16 +1,20 @@
 import sys
 import argparse
 from pathlib import Path
-from backend import local
+from infrastructure import local
 from frontend import routes
+from infrastructure import webapp
 
 
 def backend_selection(backend, path):
-    if backend == 1:
+    if backend == 1: # From local file
         list_of_data = local.get_local_data(path)
         routes.show_routes(list_of_data)
         print(list_of_data)
-    elif backend == 2:
+    elif backend == 2: # from webapp
+        list_of_data = webapp.fetch_webapp()
+        routes.show_routes(list_of_data)
+        print(list_of_data)
         print(backend)
     elif backend == 3:
         print(backend)
@@ -22,6 +26,7 @@ def backend_selection(backend, path):
 
 if __name__ == "__main__":
     # Create an argument parser
+    # TODO Helper text for the arguments
     parser = argparse.ArgumentParser(description="Select backend type and optionally provide CSV file path.")
 
     # Add backend type as a required argument
