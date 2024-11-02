@@ -1,7 +1,7 @@
-
-# Import library
-import requests
 import csv
+
+import requests
+
 
 def fetch_webservice_http(container_id,route_id):
 
