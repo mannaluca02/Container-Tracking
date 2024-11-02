@@ -1,6 +1,7 @@
-import requests
-import os
 import csv
+import os
+
+import requests
 
 """This function pull the data from the webapplication (https://fl-17-240.zhdk.cloud.switch.ch/) and returns it in a 2D Array
 
