@@ -18,7 +18,7 @@ class MqttClient:
         self.topic = f"{config['DEFAULT'].get('company')}/{config['DEFAULT'].get('container')}"
         self.token = config['mqtt'].get('token')
         client_id = "simulator_" + str(randrange(100))
-        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id=client_id, protocol=mqtt.MQTTv5)
+        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id=client_id, protocol=mqtt.MQTTv5, transport="websockets") # needed to add websockets
         self.client.on_connect = self.on_connect
         self.client.username_pw_set(self.token)
         self.connected = False
