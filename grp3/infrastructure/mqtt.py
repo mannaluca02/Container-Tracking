@@ -1,6 +1,7 @@
-import paho.mqtt.client as mqtt
 import json
 from threading import Event
+
+import paho.mqtt.client as mqtt
 
 # Event to stop the loop
 stop_event = Event()

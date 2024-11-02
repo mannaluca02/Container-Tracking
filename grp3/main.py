@@ -1,12 +1,9 @@
-import sys
 import argparse
+import sys
 from pathlib import Path
-from infrastructure import local
-from frontend import routes
-from infrastructure import webapp
-from infrastructure import webservice_http
-from infrastructure import mqtt
 
+from frontend import routes
+from infrastructure import local, mqtt, webapp, webservice_http
 
 
 def backend_selection(backend, path):
