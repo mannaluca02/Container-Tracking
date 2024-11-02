@@ -36,7 +36,7 @@ if __name__ == "__main__":
     parser.add_argument('backend_type', type=int, help='The type of backend to select (1, 2, 3, or 4)')
 
     # Add an optional argument for the CSV file path
-    parser.add_argument('-f','--csv_file_path', type=Path, nargs='?',
+    parser.add_argument('-p','--csv_file_path', type=Path, nargs='?',
                         help='Path to the CSV file (required for backend type 1)')
 
     # Add an optional argument for the container id
@@ -67,6 +67,9 @@ if __name__ == "__main__":
 
         # Call backend_selection with the selected backend and CSV file path
         backend_selection(backend_type, path=csv_file_path)
+
+    elif backend_type == 2:
+        backend_selection(backend_type)
 
     elif backend_type == 3:
         if container_id is None or route_id is None:
