@@ -1,10 +1,9 @@
-import sys
 import argparse
+import sys
 from pathlib import Path
-from infrastructure import local
+
 from frontend import routes
-from infrastructure import webapp
-from infrastructure import webservice_http
+from infrastructure import local, mqtt, webapp, webservice_http
 
 
 def backend_selection(backend, path):
@@ -18,12 +17,15 @@ def backend_selection(backend, path):
         # print(list_of_data)
         # print(backend)
     elif backend == 3:
-        list_of_data = webservice_http.fetch_webservice_http("frodo","luzern-horw")
+        list_of_data = webservice_http.fetch_webservice_http("grp3","luzern-horw")
         routes.show_routes(list_of_data)
         # print(list_of_data)
         # print(backend)
     elif backend == 4:
-        print(backend)
+        try:
+            mqtt.mqtt_func()  # Diese Funktion startet den MQTT-Client und empfängt Nachrichten
+        except KeyboardInterrupt:
+            mqtt.stop_event.set()  # Stoppe die Schleife bei Tastendruck
     else:
         print("This backend type is not supported")
 

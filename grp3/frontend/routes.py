@@ -1,7 +1,9 @@
 import time
 import tkinter as tk
 from tkinter import ttk
+
 from tkintermapview import TkinterMapView
+
 
 def get_color(temp_vars):
     if temp_vars > 29:

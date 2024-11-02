@@ -1,7 +1,6 @@
 import csv
 
 
-
 def get_local_data(csv_local_path):
     # create list to store every entry of the csv file
     container_data = []

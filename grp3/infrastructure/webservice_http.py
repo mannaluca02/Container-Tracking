@@ -1,7 +1,7 @@
-
-# Import library
-import requests
 import csv
+
+import requests
+
 
 def fetch_webservice_http(container_id,route_id):
 
@@ -27,6 +27,7 @@ def fetch_webservice_http(container_id,route_id):
             container_data.append(row)
 
         # Output
+        print("Executed successfully")
         return container_data
 
     # Failed Request
