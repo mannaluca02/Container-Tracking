@@ -10,14 +10,11 @@ def backend_selection(backend, path):
     if backend == 1: # From local file
         list_of_data = local.get_local_data(path)
         routes.show_routes(list_of_data)
-        print(list_of_data)
     elif backend == 2: # from webapp
         list_of_data = webapp.fetch_webapp()
         routes.show_routes(list_of_data)
-        # print(list_of_data)
-        # print(backend)
     elif backend == 3:
-        list_of_data = webservice_http.fetch_webservice_http("grp3","luzern-horw")
+        list_of_data = webservice_http.fetch_webservice_http("frodo","luzern-horw")
         routes.show_routes(list_of_data)
         # print(list_of_data)
         # print(backend)
