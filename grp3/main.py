@@ -77,3 +77,6 @@ if __name__ == "__main__":
             sys.exit()
 
         backend_selection(backend_type, container_id=container_id, route_id=route_id)
+    
+    elif backend_type == 4:
+        backend_selection(backend_type)

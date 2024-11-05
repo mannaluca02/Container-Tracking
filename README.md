@@ -10,3 +10,7 @@ Deactivate virtual env
 ```bash
 deactivate
 ```
+
+Erklären was installiert werden muss
+
+Wie die Applikation ausgeführt wird
