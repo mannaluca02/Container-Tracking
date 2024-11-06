@@ -30,25 +30,26 @@ def backend_selection(backend, path=None, container_id=None, route_id=None):
 if __name__ == "__main__":
     # Create an argument parser
     # TODO Helper text for the arguments
-    parser = argparse.ArgumentParser(description="Select backend type and optionally provide CSV file path.")
+    parser = argparse.ArgumentParser(description="Select backend type and give required options")
 
     # Add backend type as a required argument
     parser.add_argument('backend_type', type=int, help='The type of backend to select (1, 2, 3, or 4)')
 
     # Add an optional argument for the CSV file path
-    parser.add_argument('-p','--csv_file_path', type=Path, nargs='?',
-                        help='Path to the CSV file (required for backend type 1)')
+    local_group = parser.add_argument_group('Backend type 1', 'Arguments for backend type 1 (local csv file access)')
+    local_group.add_argument('-p','--csv_file_path', type=Path, nargs='?',
+                        help='path to the csv file')
 
+    http_group = parser.add_argument_group('Backend type 3', 'Arguments for backend type 3 (http access)')
     # Add an optional argument for the container id
-    parser.add_argument('-c','--container_id', type=str, nargs='?',
+    http_group.add_argument('-c','--container_id', type=str, nargs='?',
                         help='Name of the container (required for backend type 3)')
     # Add the first optional argument for the container id
-    parser.add_argument('-r','--route_id', type=str, nargs='?',
+    http_group.add_argument('-r','--route_id', type=str, nargs='?',
                         help='Name of the route (required for backend type 3)')
 
     # Parse the arguments
     args = parser.parse_args()
-
     backend_type = args.backend_type
     csv_file_path = args.csv_file_path
     container_id = args.container_id
