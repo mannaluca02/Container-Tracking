@@ -8,10 +8,9 @@ def get_local_data(csv_local_path):
     # open the csv file
     with open(csv_local_path) as container_csv:
         # create an object that separates the entry's of the csv with  ","
-        csv_reader_object = csv.reader(container_csv, delimiter=',')
+        csv_reader_object = csv.reader(container_csv, delimiter=",")
         # go through every entry in the object
         for row in csv_reader_object:
             # append the row to the list of all container data
             container_data.append(row)
         return container_data
-

@@ -12,6 +12,7 @@ current_humidity = None
 temperatures = []
 humidities = []
 
+
 def on_connect(client, userdata, flags, rc, properties):
     """
     Callback function for when the client receives a CONNACK response from the server.
@@ -28,6 +29,7 @@ def on_connect(client, userdata, flags, rc, properties):
     """
     print("Connected with result code " + str(rc))
     client.subscribe("migros/grp3/message")  # Setze hier das passende Topic
+
 
 def on_message(client, userdata, msg):
     """
@@ -50,8 +52,12 @@ def on_message(client, userdata, msg):
     """
     global current_temperature, current_humidity
     payload = json.loads(msg.payload)
-    current_temperature = payload.get('temp')  # 'temp' ist das Feld, das die Temperatur enthält
-    current_humidity = payload.get('hum')  # 'hum' ist das Feld, das die Luftfeuchtigkeit enthält
+    current_temperature = payload.get(
+        "temp"
+    )  # 'temp' ist das Feld, das die Temperatur enthält
+    current_humidity = payload.get(
+        "hum"
+    )  # 'hum' ist das Feld, das die Luftfeuchtigkeit enthält
     if current_temperature is not None:
         try:
             temperatures.append(float(current_temperature))  # Konvertiere zu float
@@ -63,9 +69,10 @@ def on_message(client, userdata, msg):
         except ValueError:
             print(f"Ungültiger Luftfeuchtigkeitswert: {current_humidity}")
 
+
 def mqtt_func():
     """
-    Initializes and runs an MQTT client that connects to a specified broker using websockets, 
+    Initializes and runs an MQTT client that connects to a specified broker using websockets,
     subscribes to messages, and updates real-time plots for temperature and humidity data.
     The function performs the following tasks:
     - Creates an MQTT client with a specified callback API version and transport method.
@@ -78,7 +85,7 @@ def mqtt_func():
     - Adds an event handler to stop the MQTT client loop and close the plot when the window is closed.
     - Runs an infinite loop to keep the script running until a stop event is set.
     Note:
-    - The function assumes the existence of global variables: `current_temperature`, `current_humidity`, 
+    - The function assumes the existence of global variables: `current_temperature`, `current_humidity`,
       `temperatures`, `humidities`, and `stop_event`.
     - The x-axis and y-axis limits for the plots are set based on assumed ranges for temperature and humidity values.
     - The function uses the `matplotlib.animation.FuncAnimation` class to update the plots in real-time.
@@ -86,7 +93,9 @@ def mqtt_func():
     - Any exceptions raised by the MQTT client or matplotlib functions are not explicitly handled within this function.
     """
     global current_temperature, current_humidity
-    client = mqtt.Client(callback_api_version=mqtt.CallbackAPIVersion.VERSION2, transport="websockets")
+    client = mqtt.Client(
+        callback_api_version=mqtt.CallbackAPIVersion.VERSION2, transport="websockets"
+    )
     client.on_connect = on_connect
     client.on_message = on_message
 
@@ -94,18 +103,26 @@ def mqtt_func():
     client.loop_start()
 
     fig, (ax1, ax2) = plt.subplots(2, 1)
-    line1, = ax1.plot([], [], lw=2, label='Temperatur (°C)')
-    line2, = ax2.plot([], [], lw=2, label='Luftfeuchtigkeit (%)')
-    ax1.set_ylim(15, 35)  # Setzen Sie den y-Achsenbereich entsprechend Ihrer Temperaturwerte
-    ax2.set_ylim(50, 90)  # Setzen Sie den y-Achsenbereich entsprechend Ihrer Luftfeuchtigkeitswerte
-    ax1.set_xlim(0, 100)  # Setzen Sie den x-Achsenbereich entsprechend der Anzahl der Datenpunkte
-    ax2.set_xlim(0, 100)  # Setzen Sie den x-Achsenbereich entsprechend der Anzahl der Datenpunkte
-    ax1.set_xlabel('Zeit')
-    ax1.set_ylabel('Temperatur (°C)')
-    ax1.set_title('Echtzeit-Temperaturüberwachung')
-    ax2.set_xlabel('Zeit')
-    ax2.set_ylabel('Luftfeuchtigkeit (%)')
-    ax2.set_title('Echtzeit-Luftfeuchtigkeitsüberwachung')
+    (line1,) = ax1.plot([], [], lw=2, label="Temperatur (°C)")
+    (line2,) = ax2.plot([], [], lw=2, label="Luftfeuchtigkeit (%)")
+    ax1.set_ylim(
+        15, 35
+    )  # Setzen Sie den y-Achsenbereich entsprechend Ihrer Temperaturwerte
+    ax2.set_ylim(
+        50, 90
+    )  # Setzen Sie den y-Achsenbereich entsprechend Ihrer Luftfeuchtigkeitswerte
+    ax1.set_xlim(
+        0, 100
+    )  # Setzen Sie den x-Achsenbereich entsprechend der Anzahl der Datenpunkte
+    ax2.set_xlim(
+        0, 100
+    )  # Setzen Sie den x-Achsenbereich entsprechend der Anzahl der Datenpunkte
+    ax1.set_xlabel("Zeit")
+    ax1.set_ylabel("Temperatur (°C)")
+    ax1.set_title("Echtzeit-Temperaturüberwachung")
+    ax2.set_xlabel("Zeit")
+    ax2.set_ylabel("Luftfeuchtigkeit (%)")
+    ax2.set_title("Echtzeit-Luftfeuchtigkeitsüberwachung")
 
     def init():
         """
@@ -142,20 +159,20 @@ def mqtt_func():
         ax1.set_xlim(0, max(100, len(temperatures)))  # Dynamische Anpassung der x-Achse
         ax2.set_xlim(0, max(100, len(humidities)))  # Dynamische Anpassung der x-Achse
         return line1, line2
-    
+
     # Erstellen einer Animation für das Diagramm
     # fig: Die Figur, die animiert werden soll
     # update: Die Funktion, die bei jedem Frame der Animation aufgerufen wird, um die Daten zu aktualisieren
     # init_func: Die Initialisierungsfunktion, die einmal zu Beginn der Animation aufgerufen wird
     # blit=True: Optimiert die Animation, indem nur die Teile des Plots neu gezeichnet werden, die sich ändern
     # interval=1000: Das Intervall in Millisekunden zwischen den Frames der Animation (hier 1 Sekunde)
-    ani = animation.FuncAnimation(fig, update, init_func=init, blit=True, interval=1000) 
+    ani = animation.FuncAnimation(fig, update, init_func=init, blit=True, interval=1000)
 
     def on_close(event):
         stop_event.set()
         plt.close(fig)
 
-    fig.canvas.mpl_connect('close_event', on_close)
+    fig.canvas.mpl_connect("close_event", on_close)
 
     plt.show()
 
@@ -165,9 +182,6 @@ def mqtt_func():
     finally:
         client.loop_stop()
         client.disconnect()
-
-
-
 
 
 # This code displays the temp in blue and red based on the value. But it does not show the line plot as one merged plot
