@@ -1,8 +1,8 @@
 import json
-from threading import Event
+import os
 import subprocess
 import sys
-import os
+from threading import Event
 
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt

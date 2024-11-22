@@ -3,6 +3,7 @@ import os
 
 import requests
 
+
 def fetch_webapp():
     """
     Fetches container data from a specified web application URL.
@@ -28,12 +29,13 @@ def fetch_webapp():
     # Checks if the get request was successful
     if response.status_code == 200:
         lines = response.text.splitlines()
-        
+
         csv_render_object = csv.reader(lines, delimiter=",")
         for row in csv_render_object:
             container_data.append(row)
         return container_data
-        
+
     else:
-        print(f'Error! The API get request was not successful. Error code: {response.status_code}')
-    
+        print(
+            f"Error! The API get request was not successful. Error code: {response.status_code}"
+        )
