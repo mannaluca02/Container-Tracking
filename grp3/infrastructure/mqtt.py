@@ -1,5 +1,8 @@
 import json
 from threading import Event
+import subprocess
+import sys
+import os
 
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
@@ -75,6 +78,7 @@ def mqtt_func():
     Initializes and runs an MQTT client that connects to a specified broker using websockets,
     subscribes to messages, and updates real-time plots for temperature and humidity data.
     The function performs the following tasks:
+    - Calls the simulator with the correct parameters in the background with the same Python interpreter.
     - Creates an MQTT client with a specified callback API version and transport method.
     - Sets up the on_connect and on_message callback functions.
     - Connects to the MQTT broker at the specified address and port.
@@ -92,6 +96,32 @@ def mqtt_func():
     Raises:
     - Any exceptions raised by the MQTT client or matplotlib functions are not explicitly handled within this function.
     """
+
+    # Use the current Python interpreter
+    python_executable = sys.executable
+
+    # Copy the current environment variables
+    env = os.environ.copy()
+
+    # Ensure that the venv variables are set in the subprocess
+    env["VIRTUAL_ENV"] = os.environ.get("VIRTUAL_ENV", "")
+    env["PATH"] = os.path.dirname(python_executable) + os.pathsep + env["PATH"]
+
+    # Calling the simulator script in the background
+    process = subprocess.Popen(
+        [
+            python_executable,
+            "./simulator-main/simulator.py",
+            "./simulator-main/data/demo.geojson",
+            "-c",
+            "./simulator-main/config-switch.ini",
+        ],
+        env=env,
+    )
+
+    # The main script continues and prints the process ID of the simulator
+    print(f"Simulator started with PID: {process.pid}")
+
     global current_temperature, current_humidity
     client = mqtt.Client(
         callback_api_version=mqtt.CallbackAPIVersion.VERSION2, transport="websockets"
@@ -182,105 +212,3 @@ def mqtt_func():
     finally:
         client.loop_stop()
         client.disconnect()
-
-
-# This code displays the temp in blue and red based on the value. But it does not show the line plot as one merged plot
-"""
-import json
-from threading import Event
-import paho.mqtt.client as mqtt
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-
-# Event to stop the loop
-stop_event = Event()
-current_temperature = None
-current_humidity = None
-temperatures = []
-humidities = []
-
-def on_connect(client, userdata, flags, rc):
-    print("Connected with result code " + str(rc))
-    client.subscribe("migros/grp3/message")  # Setze hier das passende Topic
-
-def on_message(client, userdata, msg):
-    global current_temperature, current_humidity
-    payload = json.loads(msg.payload)
-    current_temperature = payload.get('temp')  # 'temp' ist das Feld, das die Temperatur enthält
-    current_humidity = payload.get('hum')  # 'hum' ist das Feld, das die Luftfeuchtigkeit enthält
-    if current_temperature is not None:
-        try:
-            temperatures.append(float(current_temperature))  # Konvertiere zu float
-        except ValueError:
-            print(f"Ungültiger Temperaturwert: {current_temperature}")
-    if current_humidity is not None:
-        try:
-            humidities.append(float(current_humidity))  # Konvertiere zu float
-        except ValueError:
-            print(f"Ungültiger Luftfeuchtigkeitswert: {current_humidity}")
-
-def mqtt_func():
-    global current_temperature, current_humidity
-    client = mqtt.Client(callback_api_version=mqtt.CallbackAPIVersion.VERSION1)
-    client.on_connect = on_connect
-    client.on_message = on_message
-
-    client.connect("mqtt.eclipseprojects.io", 1883, 60)
-    client.loop_start()
-
-    fig, (ax1, ax2) = plt.subplots(2, 1)
-    line1_blue, = ax1.plot([], [], lw=2, color='blue', label='Temperatur (°C)')
-    line1_red, = ax1.plot([], [], lw=2, color='red')
-    line2_blue, = ax2.plot([], [], lw=2, color='blue', label='Luftfeuchtigkeit (%)')
-    line2_red, = ax2.plot([], [], lw=2, color='red')
-    ax1.set_ylim(15, 35)  # Setzen Sie den y-Achsenbereich entsprechend Ihrer Temperaturwerte
-    ax2.set_ylim(50, 90)  # Setzen Sie den y-Achsenbereich entsprechend Ihrer Luftfeuchtigkeitswerte
-    ax1.set_xlim(0, 100)  # Setzen Sie den x-Achsenbereich entsprechend der Anzahl der Datenpunkte
-    ax2.set_xlim(0, 100)  # Setzen Sie den x-Achsenbereich entsprechend der Anzahl der Datenpunkte
-    ax1.set_xlabel('Zeit')
-    ax1.set_ylabel('Temperatur (°C)')
-    ax1.set_title('Echtzeit-Temperaturüberwachung')
-    ax2.set_xlabel('Zeit')
-    ax2.set_ylabel('Luftfeuchtigkeit (%)')
-    ax2.set_title('Echtzeit-Luftfeuchtigkeitsüberwachung')
-
-    def init():
-        line1_blue.set_data([], [])
-        line1_red.set_data([], [])
-        line2_blue.set_data([], [])
-        line2_red.set_data([], [])
-        return line1_blue, line1_red, line2_blue, line2_red
-
-    def update(frame):
-        xdata = list(range(len(temperatures)))
-        ydata1_blue = [temp if temp <= 24 else None for temp in temperatures]
-        ydata1_red = [temp if temp > 24 else None for temp in temperatures]
-        ydata2_blue = [hum if hum >= 70 else None for hum in humidities]
-        ydata2_red = [hum if hum < 70 else None for hum in humidities]
-
-        line1_blue.set_data(xdata, ydata1_blue)
-        line1_red.set_data(xdata, ydata1_red)
-        line2_blue.set_data(xdata, ydata2_blue)
-        line2_red.set_data(xdata, ydata2_red)
-        ax1.set_xlim(0, max(100, len(temperatures)))  # Dynamische Anpassung der x-Achse
-        ax2.set_xlim(0, max(100, len(humidities)))  # Dynamische Anpassung der x-Achse
-        return line1_blue, line1_red, line2_blue, line2_red
-
-    ani = animation.FuncAnimation(fig, update, init_func=init, blit=True, interval=1000)
-
-    # Event-Handler für das Schließen des Fensters hinzufügen
-    def on_close(event):
-        stop_event.set()
-        plt.close(fig)
-
-    fig.canvas.mpl_connect('close_event', on_close)
-
-    plt.show()
-
-    try:
-        while not stop_event.is_set():
-            pass
-    finally:
-        client.loop_stop()
-        client.disconnect()
-"""
