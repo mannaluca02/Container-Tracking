@@ -16,8 +16,6 @@ def backend_selection(backend, path=None, container_id=None, route_id=None):
     elif backend == 3:
         list_of_data = webservice_http.fetch_webservice_http(container_id,route_id)
         routes.show_routes(list_of_data)
-        # print(list_of_data)
-        # print(backend)
     elif backend == 4:
         try:
             mqtt.mqtt_func()  # Diese Funktion startet den MQTT-Client und empfängt Nachrichten
