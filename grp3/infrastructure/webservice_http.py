@@ -3,7 +3,7 @@ import csv
 import requests
 
 
-def fetch_webservice_http(container_id,route_id):
+def fetch_webservice_http(container_id, route_id):
     """
     Fetches container tracking data from a web service in CSV format.
     Args:
@@ -20,15 +20,16 @@ def fetch_webservice_http(container_id,route_id):
     """
 
     # Request URL
-    url = f'https://fl-17-240.zhdk.cloud.switch.ch/containers/{container_id}/routes/{route_id}?start=0&end=-1&format=csv'
-    headers = {'accept': 'text/plain',}
+    url = f"https://fl-17-240.zhdk.cloud.switch.ch/containers/{container_id}/routes/{route_id}?start=0&end=-1&format=csv"
+    headers = {
+        "accept": "text/plain",
+    }
 
     # Send the GET request
     response = requests.get(url, headers=headers)
 
     # Check if the request was successful
     if response.status_code == 200:
-
         # Initialize list
         container_data = []
 
@@ -46,4 +47,3 @@ def fetch_webservice_http(container_id,route_id):
     # Failed Request
     else:
         print("Failed to retrieve data. Status code: {response.status_code}")
-
