@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 from main import backend_selection
 
 
-class TestMain(unittest.TestCase):
+class TestMain(unittest.TestCase):  # Erbt von unittest.TestCase
     """
     Unit tests for the backend selection functionality in the main module.
     Test Cases:
