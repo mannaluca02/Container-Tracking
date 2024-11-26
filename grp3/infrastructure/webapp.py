@@ -24,7 +24,7 @@ def fetch_webapp():
     download_url = "https://fl-17-240.zhdk.cloud.switch.ch/files/horw-luzern.csv?path=../data/migros/grp3/horw-luzern.csv"
 
     # Performs a get request (get data) with the before defined webapp url and file path
-    response = requests.get(download_url)
+    response = requests.get(download_url, verify=False)
 
     # Checks if the get request was successful
     if response.status_code == 200:

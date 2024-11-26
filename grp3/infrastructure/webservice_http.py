@@ -26,7 +26,7 @@ def fetch_webservice_http(container_id, route_id):
     }
 
     # Send the GET request
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, verify=False)
 
     # Check if the request was successful
     if response.status_code == 200:
