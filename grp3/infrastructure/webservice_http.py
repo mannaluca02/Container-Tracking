@@ -39,9 +39,18 @@ def fetch_webservice_http(container_id, route_id):
         # Convert to 2d array
         csv_render_object = csv.reader(csv_data, delimiter=",")
         for row in csv_render_object:
-            container_data.append(row)
+            entry = {
+                "datetime": row[0],
+                "x_coordinate": float(row[1]),
+                "y_coordinate": float(row[2]),
+                "temperature": float(row[3]),
+                "humidity": float(row[4]),
+            }
+            container_data.append(entry)
 
         # Output
+        print("here i am")
+        print(container_data)
         return container_data
 
     # Failed Request

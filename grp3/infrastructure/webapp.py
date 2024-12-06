@@ -32,7 +32,15 @@ def fetch_webapp():
 
         csv_render_object = csv.reader(lines, delimiter=",")
         for row in csv_render_object:
-            container_data.append(row)
+            entry = {
+                "datetime": row[0],
+                "x_coordinate": float(row[1]),
+                "y_coordinate": float(row[2]),
+                "temperature": float(row[3]),
+                "humidity": float(row[4]),
+            }
+
+            container_data.append(entry)
         return container_data
 
     else:
