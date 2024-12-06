@@ -12,5 +12,13 @@ def get_local_data(csv_local_path):
         # go through every entry in the object
         for row in csv_reader_object:
             # append the row to the list of all container data
-            container_data.append(row)
+            entry = {
+                "datetime": row[0],
+                "x_coordinate": float(row[1]),
+                "y_coordinate": float(row[2]),
+                "temperature": float(row[3]),
+                "humidity": float(row[4]),
+            }
+            container_data.append(entry)
+        print(container_data)
         return container_data

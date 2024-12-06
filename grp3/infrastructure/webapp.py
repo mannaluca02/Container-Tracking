@@ -23,7 +23,7 @@ def fetch_webapp():
     download_url = "https://fl-17-240.zhdk.cloud.switch.ch/files/horw-luzern.csv?path=../data/migros/grp3/horw-luzern.csv"
 
     # Performs a get request (get data) with the before defined webapp url and file path
-    response = requests.get(download_url)
+    response = requests.get(download_url, verify=False)
 
     # Checks if the get request was successful
     if response.status_code == 200:
@@ -31,7 +31,15 @@ def fetch_webapp():
         
         csv_render_object = csv.reader(lines, delimiter=",")
         for row in csv_render_object:
-            container_data.append(row)
+            entry = {
+                "datetime": row[0],
+                "x_coordinate": float(row[1]),
+                "y_coordinate": float(row[2]),
+                "temperature": float(row[3]),
+                "humidity": float(row[4]),
+            }
+
+            container_data.append(entry)
         return container_data
         
     else:
