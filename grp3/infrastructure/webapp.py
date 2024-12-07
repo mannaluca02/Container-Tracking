@@ -21,7 +21,7 @@ def fetch_webapp():
     container_data = []
 
     # Defines the URL from the Webapplication and where the data is placed
-    download_url = "https://fl-17-240.zhdk.cloud.switch.ch/files/horw-luzern.csv?path=../data/migros/grp3/horw-luzern.csv"
+    download_url = "https://fl-17-240.zhdk.cloud.switch.ch/files/horw-luzern.csv?path=../data/migros/frodo/horw-luzern.csv"
 
     # Performs a get request (get data) with the before defined webapp url and file path
     response = requests.get(download_url, verify=False)
