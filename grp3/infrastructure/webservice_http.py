@@ -40,8 +40,25 @@ def fetch_webservice_http(container_id, route_id):
                 print("Error: No valid data available for the given container and route.")
                 return None
 
-        # Handle HTTP error responses
-        error_messages = {
+        # Convert to 2d array
+        csv_render_object = csv.reader(csv_data, delimiter=",")
+        for row in csv_render_object:
+            entry = {
+                "datetime": row[0],
+                "x_coordinate": float(row[1]),
+                "y_coordinate": float(row[2]),
+                "temperature": float(row[3]),
+                "humidity": float(row[4]),
+            }
+            container_data.append(entry)
+
+        # Output
+        print("here i am")
+        print(container_data)
+        return container_data
+
+    # Handle connection-related exceptions
+    error_messages = {
             400: "Bad Request: The server could not understand the request. Check your input parameters.",
             401: "Unauthorized: Authentication failed or missing credentials.",
             403: "Forbidden: You don't have permission to access the requested resource.",
@@ -50,16 +67,5 @@ def fetch_webservice_http(container_id, route_id):
             503: "Service Unavailable: The server is currently unavailable. Try again later.",
         }
 
-        print(error_messages.get(response.status_code, f"Failed to retrieve data. Status code: {response.status_code}"))
-        return None
-
-    # Handle connection-related exceptions
-    except requests.exceptions.ConnectionError:
-        print("Connection Error: Unable to connect to the server. Please check your internet connection or the server URL.")
-        return None
-    except requests.exceptions.Timeout:
-        print("Timeout Error: The server took too long to respond. Try again later.")
-        return None
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-        return None
+     print(error_messages.get(response.status_code, f"Failed to retrieve data. Status code: {response.status_code}"))
+     return None

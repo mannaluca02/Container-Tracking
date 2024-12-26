@@ -25,25 +25,23 @@ def get_local_data(csv_local_path):
     # Create a list to store every entry of the CSV file
     container_data = []
 
-    try:
-        # Open the CSV file
-        with open(csv_local_path) as container_csv:
-            # Create a CSV reader object to parse the file
-            csv_reader_object = csv.reader(container_csv, delimiter=",")
 
-            # Go through every entry in the object
-            for row in csv_reader_object:
-
-                # Check if the row contains the correct number of columns
-                if len(row) != 5:
-                    print(f"Error: Row contains an invalid number of columns or uses an incorrect delimiter (',' expected).")
-
-                    return None  # Return None if any row is invalid
-
-                # Append the row to the list of all container data
-                container_data.append(row)
-
-        # Return the valid container data
+    # open the csv file
+    with open(csv_local_path) as container_csv:
+        # create an object that separates the entry's of the csv with  ","
+        csv_reader_object = csv.reader(container_csv, delimiter=",")
+        # go through every entry in the object
+        for row in csv_reader_object:
+            # append the row to the list of all container data
+            entry = {
+                "datetime": row[0],
+                "x_coordinate": float(row[1]),
+                "y_coordinate": float(row[2]),
+                "temperature": float(row[3]),
+                "humidity": float(row[4]),
+            }
+            container_data.append(entry)
+        print(container_data)
         return container_data
 
     except Exception as e:
