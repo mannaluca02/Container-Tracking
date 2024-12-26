@@ -1,6 +1,7 @@
 import argparse
 import sys
 from pathlib import Path
+from tkinter import W
 
 from frontend import routes
 from infrastructure import local, mqtt, webapp, webservice_http
@@ -10,13 +11,15 @@ if __name__ == "__main__":
     # Create an argument parser
     parser = argparse.ArgumentParser(
         description="This script allows selecting a backend type (1–4) and provides options "
-            "to supply additional parameters required for the chosen backend.",
-        formatter_class=argparse.RawTextHelpFormatter  #Adding Raw Format to use /n
+        "to supply additional parameters required for the chosen backend.",
+        formatter_class=argparse.RawTextHelpFormatter,  # Adding Raw Format to use /n
     )
 
     # Add backend type as a required argument
     parser.add_argument(
-        "backend_type", type=int, choices=range(1, 5),
+        "backend_type",
+        type=int,
+        choices=range(1, 5),
         help=(
             "The backend type to select:\n"
             "1: Local CSV file access (requires --csv_path).\n"
@@ -31,7 +34,10 @@ if __name__ == "__main__":
         "Backend type 1", "Arguments for backend type 1 (local csv file access)"
     )
     local_group.add_argument(
-        "-p", "--csv_path", type=Path, nargs="?",
+        "-p",
+        "--csv_path",
+        type=Path,
+        nargs="?",
         help=(
             "Path to the local csv file. This is required when backend type 1 is selected.\n"
             "Example: -p ./data/demo.csv"
@@ -43,7 +49,10 @@ if __name__ == "__main__":
     )
     # Add an optional argument for the container id
     http_group.add_argument(
-        "-c", "--container_id", type=str, nargs="?",
+        "-c",
+        "--container_id",
+        type=str,
+        nargs="?",
         help=(
             "The container ID to fetch data for. Required when backend type 3 is selected.\n"
             "Example: -c 'grp3'"
@@ -51,7 +60,10 @@ if __name__ == "__main__":
     )
     # Add the first optional argument for the container id
     http_group.add_argument(
-        "-r", "--route_id", type=str, nargs="?",
+        "-r",
+        "--route_id",
+        type=str,
+        nargs="?",
         help=(
             "The route ID associated with the container. Required when backend type 3 is selected.\n"
             "Example: -r 'demo'"
@@ -64,7 +76,6 @@ if __name__ == "__main__":
     csv_path = args.csv_path
     container_id = args.container_id
     route_id = args.route_id
-
 
     # Handle Backend Type 1
     if backend_type == 1:
@@ -82,13 +93,15 @@ if __name__ == "__main__":
 
         # Process the local CSV data
         local_data = local.get_local_data(csv_path)
-        routes.show_routes(local_data)
+        if local_data:
+            routes.show_routes(local_data)
 
     # Handle Backend Type 2
     elif backend_type == 2:
         # Fetch and display data from the web application
         webapp_data = webapp.fetch_webapp()
-        routes.show_routes(webapp_data)
+        if webapp_data:
+            routes.show_routes(webapp_data)
 
     # Handle Backend Type 3
     elif backend_type == 3:
@@ -99,7 +112,8 @@ if __name__ == "__main__":
 
         # Fetch data from the HTTP web service
         webservice_data = webservice_http.fetch_webservice_http(container_id, route_id)
-        routes.show_routes(webservice_data)
+        if webservice_data:
+            routes.show_routes(webservice_data)
 
     # Handle Backend Type 4
     elif backend_type == 4:
