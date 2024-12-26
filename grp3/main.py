@@ -5,6 +5,7 @@ from pathlib import Path
 from frontend import routes
 from infrastructure import local, mqtt, webapp, webservice_http
 
+
 if __name__ == "__main__":
     # Create an argument parser
     parser = argparse.ArgumentParser(

@@ -14,3 +14,6 @@ deactivate
 Erklären was installiert werden muss
 
 Wie die Applikation ausgeführt wird
+
+
+Simulator ausführen: python simulator.py ./data/horw-luzern.geojson -c ./config-switch.ini

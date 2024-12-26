@@ -1,6 +1,10 @@
 import csv
-
 import requests
+import warnings
+from urllib3.exceptions import InsecureRequestWarning
+
+# Suppress all InsecureRequestWarning warnings globally
+warnings.simplefilter("ignore", InsecureRequestWarning)
 
 
 def fetch_webservice_http(container_id, route_id):
@@ -18,28 +22,24 @@ def fetch_webservice_http(container_id, route_id):
         - 'humidity' (float): The humidity value.
     Raises:
         requests.exceptions.RequestException: If the request to the web service fails.
+
     """
-
-    # Request URL
+    # Define the URL and headers
     url = f"https://fl-17-240.zhdk.cloud.switch.ch/containers/{container_id}/routes/{route_id}?start=0&end=-1&format=csv"
-    headers = {
-        "accept": "text/plain",
-    }
+    headers = {"accept": "text/plain"}
 
-    # Send the GET request
-    response = requests.get(url, headers=headers, verify=False)
+    try:
+        # Send the GET request
+        response = requests.get(url, headers=headers, verify=False)
 
-    # Check if the request was successful
-    if response.status_code == 200:
-        # Initialize list
-        container_data = []
-
-        # Get the content of the response as text (CSV format)
-        csv_data = response.text.splitlines()
+        # Check if the request was successful
+        if response.status_code == 200:
+            csv_data = response.text.splitlines()
+            csv_data = list(csv.reader(csv_data, delimiter=","))
 
         # Convert to 2d array
-        csv_render_object = csv.reader(csv_data, delimiter=",")
-        for row in csv_render_object:
+        container_data = []
+        for row in csv_data:
             entry = {
                 "datetime": row[0],
                 "x_coordinate": float(row[1]),
@@ -52,6 +52,21 @@ def fetch_webservice_http(container_id, route_id):
         # Output
         return container_data
 
-    # Failed Request
-    else:
-        print("Failed to retrieve data. Status code: {response.status_code}")
+    except:
+        # Handle connection-related exceptions
+        error_messages = {
+            400: "Bad Request: The server could not understand the request. Check your input parameters.",
+            401: "Unauthorized: Authentication failed or missing credentials.",
+            403: "Forbidden: You don't have permission to access the requested resource.",
+            404: f"Not Found: The resource for container ID {container_id} and route ID {route_id} was not found.",
+            500: "Internal Server Error: The server encountered an unexpected condition.",
+            503: "Service Unavailable: The server is currently unavailable. Try again later.",
+        }
+
+        print(
+            error_messages.get(
+                response.status_code,
+                f"Failed to retrieve data. Status code: {response.status_code}",
+            )
+        )
+        return None
