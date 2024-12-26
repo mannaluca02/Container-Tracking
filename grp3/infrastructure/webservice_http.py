@@ -6,6 +6,7 @@ from urllib3.exceptions import InsecureRequestWarning
 # Suppress all InsecureRequestWarning warnings globally
 warnings.simplefilter("ignore", InsecureRequestWarning)
 
+
 def fetch_webservice_http(container_id, route_id):
     """
     Fetches container tracking data from a web service in CSV format.
@@ -20,7 +21,6 @@ def fetch_webservice_http(container_id, route_id):
         >>> print(data)
         [['header1', 'header2', ...], ['value1', 'value2', ...], ...]
     """
-
     # Define the URL and headers
     url = f"https://fl-17-240.zhdk.cloud.switch.ch/containers/{container_id}/routes/{route_id}?start=0&end=-1&format=csv"
     headers = {"accept": "text/plain"}
@@ -32,17 +32,11 @@ def fetch_webservice_http(container_id, route_id):
         # Check if the request was successful
         if response.status_code == 200:
             csv_data = response.text.splitlines()
-            container_data = list(csv.reader(csv_data, delimiter=","))
-
-            if container_data:  # Ensure data is not empty
-                return container_data
-            else:
-                print("Error: No valid data available for the given container and route.")
-                return None
+            csv_data = list(csv.reader(csv_data, delimiter=","))
 
         # Convert to 2d array
-        csv_render_object = csv.reader(csv_data, delimiter=",")
-        for row in csv_render_object:
+        container_data = []
+        for row in csv_data:
             entry = {
                 "datetime": row[0],
                 "x_coordinate": float(row[1]),
@@ -53,12 +47,11 @@ def fetch_webservice_http(container_id, route_id):
             container_data.append(entry)
 
         # Output
-        print("here i am")
-        print(container_data)
         return container_data
 
-    # Handle connection-related exceptions
-    error_messages = {
+    except:
+        # Handle connection-related exceptions
+        error_messages = {
             400: "Bad Request: The server could not understand the request. Check your input parameters.",
             401: "Unauthorized: Authentication failed or missing credentials.",
             403: "Forbidden: You don't have permission to access the requested resource.",
@@ -67,5 +60,10 @@ def fetch_webservice_http(container_id, route_id):
             503: "Service Unavailable: The server is currently unavailable. Try again later.",
         }
 
-     print(error_messages.get(response.status_code, f"Failed to retrieve data. Status code: {response.status_code}"))
-     return None
+        print(
+            error_messages.get(
+                response.status_code,
+                f"Failed to retrieve data. Status code: {response.status_code}",
+            )
+        )
+        return None

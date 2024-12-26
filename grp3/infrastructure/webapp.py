@@ -6,6 +6,7 @@ from urllib3.exceptions import InsecureRequestWarning
 # Suppress all InsecureRequestWarning warnings globally
 warnings.simplefilter("ignore", InsecureRequestWarning)
 
+
 def fetch_webapp():
     """
     Fetches container data from a specified web application URL.
@@ -32,15 +33,14 @@ def fetch_webapp():
             csv_render_object = csv.reader(lines, delimiter=",")
             for row in csv_render_object:
                 entry = {
-                "datetime": row[0],
-                "x_coordinate": float(row[1]),
-                "y_coordinate": float(row[2]),
-                "temperature": float(row[3]),
-                "humidity": float(row[4]),
+                    "datetime": row[0],
+                    "x_coordinate": float(row[1]),
+                    "y_coordinate": float(row[2]),
+                    "temperature": float(row[3]),
+                    "humidity": float(row[4]),
                 }
-                
-                container_data.append(entry)
 
+                container_data.append(entry)
             if container_data:  # Ensure data is not empty
                 return container_data
             else:
@@ -53,12 +53,19 @@ def fetch_webapp():
             500: f"Error: The server encountered an internal error. Response body: {response.text}",
         }
 
-        print(error_messages.get(response.status_code, f"Error: The API GET request was not successful. Status code: {response.status_code}"))
+        print(
+            error_messages.get(
+                response.status_code,
+                f"Error: The API GET request was not successful. Status code: {response.status_code}",
+            )
+        )
         return None
 
     # Handle connection-related exceptions
     except requests.exceptions.ConnectionError:
-        print("Connection Error: Unable to connect to the server. Please check your internet connection or the server URL.")
+        print(
+            "Connection Error: Unable to connect to the server. Please check your internet connection or the server URL."
+        )
         return None
 
     except requests.exceptions.Timeout:
