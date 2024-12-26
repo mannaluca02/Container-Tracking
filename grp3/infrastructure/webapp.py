@@ -10,12 +10,24 @@ warnings.simplefilter("ignore", InsecureRequestWarning)
 def fetch_webapp():
     """
     Fetches container data from a specified web application URL.
-    Performs a GET request to download a CSV file from a predefined URL.
+
+
+    This function performs a GET request to download a CSV file from a predefined URL.
     If the request is successful, it reads the CSV content and returns it as a list of rows.
     Each row is represented as a list of strings.
     Returns:
-        list: A list of rows, where each row is a list of strings containing the CSV data.
-        None: If an error occurs or no valid data is retrieved.
+        A list of dictionaries, where each dictionary represents one row of the csv file with the following keys:
+        - 'datetime' (str): The timestamp of the entry.
+        - 'x_coordinate' (float): The X-coordinate of the container.
+        - 'y_coordinate' (float): The Y-coordinate of the container.
+        - 'temperature' (float): The temperature value.
+        - 'humidity' (float): The humidity value.
+    Raises:
+        requests.exceptions.RequestException: If the GET request fails.
+    Prints:
+        str: A success message if the request is successful.
+        str: An error message with the status code if the request fails.
+
     """
     # Define the URL for the web application
     download_url = "https://fl-17-240.zhdk.cloud.switch.ch/files/horw-luzern.csv?path=../data/migros/frodo/horw-luzern.csv"

@@ -14,12 +14,15 @@ def fetch_webservice_http(container_id, route_id):
         container_id (str): The ID of the container to fetch data for.
         route_id (str): The ID of the route to fetch data for.
     Returns:
-        list: A list of lists, where each inner list represents a row of the CSV data.
-        None: In case of failure or error.
-    Example:
-        >>> data = fetch_webservice_http('container123', 'route456')
-        >>> print(data)
-        [['header1', 'header2', ...], ['value1', 'value2', ...], ...]
+        A list of dictionaries, where each dictionary represents one row of the csv file with the following keys:
+        - 'datetime' (str): The timestamp of the entry.
+        - 'x_coordinate' (float): The X-coordinate of the container.
+        - 'y_coordinate' (float): The Y-coordinate of the container.
+        - 'temperature' (float): The temperature value.
+        - 'humidity' (float): The humidity value.
+    Raises:
+        requests.exceptions.RequestException: If the request to the web service fails.
+
     """
     # Define the URL and headers
     url = f"https://fl-17-240.zhdk.cloud.switch.ch/containers/{container_id}/routes/{route_id}?start=0&end=-1&format=csv"

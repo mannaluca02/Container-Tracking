@@ -2,8 +2,27 @@ import csv
 import os
 from pathlib import Path  # Import pathlib if you're working with WindowsPath
 
-
 def get_local_data(csv_local_path):
+    """
+    Reads container data from a csv file and returns it as a list of dictionaries.
+
+    Args:
+        csv_file (str): The path to the csv file containing container data.
+
+    Returns:
+        A list of dictionaries, where each dictionary represents one row of the csv file with the following keys:
+        - 'datetime' (str): The timestamp of the entry.
+        - 'x_coordinate' (float): The X-coordinate of the container.
+        - 'y_coordinate' (float): The Y-coordinate of the container.
+        - 'temperature' (float): The temperature value.
+        - 'humidity' (float): The humidity value.
+
+    Raises:
+        FileNotFoundError: If the specified csv file does not exist.
+        ValueError: If the data in the csv file is not formatted correctly.
+    """
+
+
     # Convert WindowsPath to a string (if it's a Path object)
     if isinstance(csv_local_path, Path):
         csv_local_path = str(csv_local_path)
