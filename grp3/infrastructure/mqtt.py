@@ -7,6 +7,7 @@ from threading import Event
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import paho.mqtt.client as mqtt
+from paho.mqtt.client import mqtt_ms_queued
 
 # Event to stop the loop
 stop_event = Event()
@@ -53,6 +54,7 @@ def on_message(client, userdata, msg):
         - The payload is expected to be a JSON object with 'temp' and 'hum' fields.
         - Invalid temperature or humidity values will be reported via print statements.
     """
+
     global current_temperature, current_humidity
     payload = json.loads(msg.payload)
     current_temperature = payload.get(
@@ -111,10 +113,10 @@ def mqtt_func():
     process = subprocess.Popen(
         [
             python_executable,
-            "./simulator-main/simulator.py",
-            "./simulator-main/data/demo.geojson",
+            "../simulator-main/simulator.py",
+            "../simulator-main/data/demo.geojson",
             "-c",
-            "./simulator-main/config-switch.ini",
+            "../simulator-main/config-switch.ini",
         ],
         env=env,
     )

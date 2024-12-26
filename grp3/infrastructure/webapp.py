@@ -7,11 +7,17 @@ import requests
 def fetch_webapp():
     """
     Fetches container data from a specified web application URL.
+
     This function performs a GET request to download a CSV file from a predefined URL.
     If the request is successful, it reads the CSV content and returns it as a list of rows.
     Each row is represented as a list of strings.
     Returns:
-        list: A list of rows, where each row is a list of strings containing the CSV data.
+        A list of dictionaries, where each dictionary represents one row of the csv file with the following keys:
+        - 'datetime' (str): The timestamp of the entry.
+        - 'x_coordinate' (float): The X-coordinate of the container.
+        - 'y_coordinate' (float): The Y-coordinate of the container.
+        - 'temperature' (float): The temperature value.
+        - 'humidity' (float): The humidity value.
     Raises:
         requests.exceptions.RequestException: If the GET request fails.
     Prints:
@@ -41,6 +47,7 @@ def fetch_webapp():
             }
 
             container_data.append(entry)
+        print(container_data)
         return container_data
 
     else:
