@@ -51,8 +51,9 @@ deactivate
 ```
 
 ## Usage
-Please refer to the compatibility section below.
-Start with the Help-Message:
+<p>Before you start, please refer to the compatibility section below. <br>
+Change to the grp3 directory and start with the help message.</p>    
+
 ```shell
 python main.py -h
 usage: main.py [-h] [-p [CSV_PATH]] [-c [CONTAINER_ID]] [-r [ROUTE_ID]] {1,2,3,4}
