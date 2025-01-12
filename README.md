@@ -51,6 +51,7 @@ deactivate
 ```
 
 ## Usage
+Please refer to the compatibility section below.
 Start with the Help-Message:
 ```shell
 python main.py -h
@@ -85,7 +86,7 @@ Backend type 3:
                         The route ID associated with the container. Required when backend type 3 is selected.
                         Example: -r 'demo'
 ```
-
-
+## Compatibility
+We have tested the application on multiple Windows and MacOS machines, and all tests were successful. However, we encountered issues on a Mac with an M4 chip. There seems to be a problem with urllib and ssl. The bug is not well documented, and the error message lacks detail. Subsequently, we tested our tool on an M3 chip, where it ran successfully. We tried to fix the bug and even attempted to switch to OpenSSL, but all efforts were unsuccessful. It seems that the bug lies outside the area where we can make changes.
 
 
