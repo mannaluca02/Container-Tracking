@@ -21,7 +21,7 @@ The tracker can
 ## Installation
 To run this simulator on your local machine use the following guide:
 - Clone the repo.
-- Create a virtual environment.
+- Create a virtual environment in the project directory.
   ```shell
   python -m venv ./venv
   ```
@@ -35,7 +35,39 @@ To run this simulator on your local machine use the following guide:
     ```
 ## Usage
 Start with the Help-Message:
+```shell
 python main.py --help
+usage: main.py [-h] [-p [CSV_PATH]] [-c [CONTAINER_ID]] [-r [ROUTE_ID]] {1,2,3,4}
+
+This script allows selecting a backend type (1–4) and provides options to supply additional parameters required for the chosen backend.
+
+positional arguments:
+  {1,2,3,4}             The backend type to select:
+                        1: Local CSV file access (requires --csv_path).
+                        2: WebApp data fetching (no additional arguments required).
+                        3: HTTP service (requires --container_id and --route_id).
+                        4: MQTT service (no additional arguments required).
+
+options:
+  -h, --help            show this help message and exit
+
+Backend type 1:
+  Arguments for backend type 1 (local csv file access)
+
+  -p [CSV_PATH], --csv_path [CSV_PATH]
+                        Path to the local csv file. This is required when backend type 1 is selected.
+                        Example: -p ./data/demo.csv
+
+Backend type 3:
+  Arguments for backend type 3 (http access)
+
+  -c [CONTAINER_ID], --container_id [CONTAINER_ID]
+                        The container ID to fetch data for. Required when backend type 3 is selected.
+                        Example: -c 'grp3'
+  -r [ROUTE_ID], --route_id [ROUTE_ID]
+                        The route ID associated with the container. Required when backend type 3 is selected.
+                        Example: -r 'demo'
+```
 
 
 ```bash
