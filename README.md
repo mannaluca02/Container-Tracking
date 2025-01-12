@@ -25,7 +25,13 @@ To run this simulator on your local machine use the following guide:
   ```shell
   python -m venv ./venv
   ```
-- Activate [virtual environment](https://docs.python.org/3/library/venv.html).
+- Activate [virtual environment](https://docs.python.org/3/library/venv.html
+With Windows
+```shell
+.\venv\Scripts\activate
+```
+
+With MacOS and Linux 
   ```shell
   source ./venv/bin/activate
   ```
