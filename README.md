@@ -4,7 +4,7 @@ The tracker can
 - read a local csv file and display the route on a 2d streetmap 
 - read a csv file from the webapp and display the route on a 2d streetmap
 - read a csv file from the webservice and display the route on a 2d streetmap
-- auto start the simulator and read out the data live via mqtt an display the humidity and temperature
+- auto start the simulator and read out the data live via mqtt an display the humidity and temperature in a chart
 
 ## Requirements
 - Check if `python` 3.10.x and higher is installed:
@@ -45,6 +45,11 @@ With MacOS and Linux
 ```
 pip install -r requirements.txt
 ```
+- Deactivate virtual env after usage 
+```shell
+deactivate
+```
+
 ## Usage
 Start with the Help-Message:
 ```shell
@@ -82,14 +87,5 @@ Backend type 3:
 ```
 
 
-```bash
-python -m venv venv
-venv\Scripts\activate  
-pip install -r requirements.txt
-```
-Deactivate virtual env
-```bash
-deactivate
-```
 
 
