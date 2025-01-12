@@ -48,7 +48,7 @@ pip install -r requirements.txt
 ## Usage
 Start with the Help-Message:
 ```shell
-python main.py --help
+python main.py -h
 usage: main.py [-h] [-p [CSV_PATH]] [-c [CONTAINER_ID]] [-r [ROUTE_ID]] {1,2,3,4}
 
 This script allows selecting a backend type (1–4) and provides options to supply additional parameters required for the chosen backend.
