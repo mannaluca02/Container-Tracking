@@ -7,7 +7,7 @@ The tracker can
 - auto start the simulator and read out the data live via mqtt an display the humidity and temperature in a chart
 
 ## Requirements
-- Check if `python` 3.10.x and higher is installed:
+- Check if `python` 3.12.x and higher is installed:
     ```shell
     python --version
     Python 3.12.8
