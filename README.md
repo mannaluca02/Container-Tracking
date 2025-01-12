@@ -10,12 +10,12 @@ The tracker can
 - Check if `python` 3.10.x and higher is installed:
     ```shell
     python --version
-    Python 3.12.3
+    Python 3.12.8
     ```
 - Check if `pip` is installed:
     ```shell
     pip --version
-    pip 24.0
+    pip 24.2
     ```
     
 ## Installation
@@ -48,9 +48,4 @@ Deactivate virtual env
 deactivate
 ```
 
-Erklären was installiert werden muss
 
-Wie die Applikation ausgeführt wird
-
-
-Simulator ausführen: python simulator.py ./data/horw-luzern.geojson -c ./config-switch.ini
