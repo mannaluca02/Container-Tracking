@@ -6,6 +6,32 @@ from tkinter import W
 from frontend import routes
 from infrastructure import local, mqtt, webapp, webservice_http
 
+def backend_selection(backend, path=None, container_id=None, route_id=None):
+    if backend == 1:  # From local file
+        list_of_data = local.get_local_data(path)
+        if list_of_data:
+            routes.show_routes(list_of_data)
+
+
+    elif backend == 2:  # from webapp
+        list_of_data = webapp.fetch_webapp()
+        if list_of_data:
+            routes.show_routes(list_of_data)
+
+
+    elif backend == 3: # webservice_http
+        list_of_data = webservice_http.fetch_webservice_http(container_id, route_id)
+        if list_of_data:
+            routes.show_routes(list_of_data)
+
+    elif backend == 4:
+        try:
+            mqtt.mqtt_func()  # Diese Funktion startet den MQTT-Client und empfängt Nachrichten
+        except KeyboardInterrupt:
+            mqtt.stop_event.set()  # Stoppe die Schleife bei Tastendruck
+    else:
+        raise ValueError("Invalid backend type. Please select 1, 2, 3, or 4.")
+
 
 if __name__ == "__main__":
     # Create an argument parser
@@ -91,17 +117,13 @@ if __name__ == "__main__":
             print(f"Error: The file {csv_path} does not exist.")
             sys.exit()
 
-        # Process the local CSV data
-        local_data = local.get_local_data(csv_path)
-        if local_data:
-            routes.show_routes(local_data)
+        # Call backend_selection with the selected backend and CSV file path
+        backend_selection(backend_type, path=csv_path)
 
     # Handle Backend Type 2
     elif backend_type == 2:
-        # Fetch and display data from the web application
-        webapp_data = webapp.fetch_webapp()
-        if webapp_data:
-            routes.show_routes(webapp_data)
+        # Call backend_selection with the selected backend and CSV file path
+        backend_selection(backend_type, path=csv_path)
 
     # Handle Backend Type 3
     elif backend_type == 3:
@@ -110,20 +132,12 @@ if __name__ == "__main__":
             print("Error: You must provide a container ID and route ID.")
             sys.exit()
 
-        # Fetch data from the HTTP web service
-        webservice_data = webservice_http.fetch_webservice_http(container_id, route_id)
-        if webservice_data:
-            routes.show_routes(webservice_data)
+        backend_selection(backend_type, container_id=container_id, route_id=route_id)
+
 
     # Handle Backend Type 4
     elif backend_type == 4:
-        try:
-            # Start the MQTT client and handle incoming messages
-            mqtt.mqtt_func()  # This function starts the MQTT client and receives messages.
-
-        except KeyboardInterrupt:
-            # Stop the MQTT client loop when a keyboard interrupt occurs
-            mqtt.stop_event.set()  # Stops the loop when keyboard interrupt occurs
+        backend_selection(backend_type)
     # Handle invalid backend types
     else:
         sys.exit("Error: Invalid backend type. Please select 1, 2, 3, or 4.")
