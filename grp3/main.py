@@ -1,7 +1,6 @@
 import argparse
 import sys
 from pathlib import Path
-from tkinter import W
 
 from frontend import routes
 from infrastructure import local, mqtt, webapp, webservice_http
